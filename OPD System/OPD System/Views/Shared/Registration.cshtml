@@ -1,0 +1,120 @@
+﻿@model OPD_System.Models.PatientRegistration
+<link href="~/Content/css/bootstrap-timepicker.min.css" rel="stylesheet" />
+<div class="row">
+    <form id="PatientRegistration">
+        @Html.ValidationSummary()
+        <div class="col-md-3">
+            <div class="col-md-12 form-group profileimage" align="center">
+                <div class="col-md-12 form-group">
+                    <img src="~/Content/images/profileimg.jpg" width="75px" height="100px" />
+                </div>
+                <button type="button" class="btn btn-default"><i class="fa fa-upload"></i>Upload Image</button>
+                <button type="button" class="btn btn-default"><i class="fa fa-camera"></i> Capture Image</button>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="col-md-12 form-group">
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.patientname, new { htmlAttributes = new { @class = "control-lable1" } })<span style="color:red">*</span>
+                    @Html.EditorFor(model => model.patientname, new { htmlAttributes = new { @class = "form-control1", @placeholder = "Patient Name", @required = true, @onkeypress = "validatepatientname" } })
+                    <lable id="patienterror"></lable>
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.mobile, new { htmlAttributes = new { @class = "control-lable1" } })
+                    @Html.EditorFor(model => model.mobile, new { htmlAttributes = new { @class = "form-control1", @placeholder = "Mobile Number" } })                    
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.email, new { htmlAttributes = new { @class = "control-lable1" } })
+                    @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control1", @placeholder = "abc@xyz.com" } })
+                </div>
+            </div>
+            <div class="col-md-12 form-group">
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.gender, new { htmlAttributes = new { @class = "control-lable1" } })
+                    @Html.DropDownListFor(model => model.gender, new SelectList(new[] { "Male", "Female" }), new { @class = "form-control1" })
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.dob, new { htmlAttributes = new { @class = "control-lable1" } })
+                    @Html.EditorFor(model => model.dob, new { htmlAttributes = new { @class = "form-control1 date" } })
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.age, new { htmlAttributes = new { @class = "control-lable1" } })
+                    @Html.EditorFor(model => model.age, new { htmlAttributes = new { @class = "form-control1" } })
+                </div>
+            </div>
+            <div class="col-md-12 form-group">
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.maritalstatus, new { htmlAttributes = new { @class = "control-lable1" } })
+                    @Html.DropDownListFor(model => model.maritalstatus, new SelectList(new[] { "Married", "Unmarried" }), new { @class = "col-md-3 form-control1" })
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.address, new { htmlAttributes = new { @class = "control-lable1" } })
+                    @Html.EditorFor(model => model.address, new { htmlAttributes = new { @class = "form-control1 date" } })
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.state, new { htmlAttributes = new { @class = "control-lable1" } })
+                    @Html.EditorFor(model => model.state, new { htmlAttributes = new { @class = "form-control1" } })
+                </div>
+            </div>
+            <div class="col-md-12 form-group">
+                <button type="button" id="Close" class="btn btn-default" data-dismiss="modal">Close</button>
+                <input type="submit" id="btnSave" class="btn btn-warning" data-dismiss="modal" value="Save">
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="~/Content/js/jquery-1.10.2.min.js"></script>
+<script src="~/Content/js/bootstrap-timepicker.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var date_input = $('.date');
+        date_input.datepicker({
+            format: 'mm/dd/yyyy',
+            todayHighlight: true,
+            autoclose: true,
+        })
+    })
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(function () {
+            $('#btnSave').click(function (event) {
+                event.preventDefault();
+
+                var name = $('#patientname').val();
+
+                var Patient = {
+                    patientname: name,
+                    age: 31
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Patient/PatientRegistration",
+                    data: JSON.stringify(Patient),
+                    dataType: "json",
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+                        alert(data.str);
+                    },
+                    error: function () {
+                        alert("Error Occured!!");
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    function validatepatientname() {
+        if ($("#patientname").val() == "") {
+            var error = "Patient Name is Required";
+            $(error).appendTo("#Patienterror");
+        }
+    }
+
+</script>
