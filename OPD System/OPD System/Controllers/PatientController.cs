@@ -18,10 +18,16 @@ namespace OPD_System.Controllers
         [HttpPost]
         public ActionResult PatientRegistration(PatientRegistration obj)
         {
-            return Json(new {
-                str=obj.patientname
-            });
+            return View();
         }
+
+        public JsonResult getPatient(int patientid)
+        {
+
+
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+
 
         public ActionResult Treatment()
         {

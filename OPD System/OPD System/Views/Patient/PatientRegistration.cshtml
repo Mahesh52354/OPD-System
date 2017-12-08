@@ -9,47 +9,135 @@
         <h4>Patient Registration</h4>
         <hr />
     </div>
-    @using (Html.BeginForm("PatientRegistration", "Patient", FormMethod.Post))
-    {
 
-        @Html.AntiForgeryToken()
+    <div class="col-md-12">
+        <button class="btn btn-info btn-sm" data-target="#newPatient" data-toggle="modal"> New Patient</button>
+    </div>
+    <div id="newPatient" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
 
-        <div class="col-md-3" align="center">
-            <div class="col-md-12 form-group">
-                <img src="~/Content/images/profileimg.jpg" class="profileimage" width="75px" height="100px" />
-            </div>
-            <button class="btn btn-default"><i class="fa fa-upload"></i>Upload Image</button>
-            <button class="btn btn-default"><i class="fa fa-camera"></i> Capture Image</button>
-        </div>
-        <div class="col-md-9 form-group">
-            <div class="col-md-4">
-                @Html.LabelFor(model => model.patientname, new { htmlAttributes = new { @class = "col-md-12 control-lable1" } })<span style="color:red">*</span>
-                @Html.EditorFor(model => model.patientname, new { htmlAttributes = new { @class = "col-md-12 form-control1", @placeholder = "Patient Name", @required = true } })
-            </div>
-            <div class="col-md-4">
-                @Html.LabelFor(model => model.mobile, new { htmlAttributes = new { @class = "col-md-12 control-lable1" } })
-                @Html.EditorFor(model => model.mobile, new { htmlAttributes = new { @class = "col-md-12 form-control1", @placeholder = "Mobile Number" } })
-            </div>
-            <div class="col-md-4">
-                @Html.LabelFor(model => model.email, new { htmlAttributes = new { @class = "col-md-12 control-lable1" } })
-                @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "col-md-12 form-control1", @placeholder = "abc@xyz.com" } })
-            </div>
-        </div>
+            <!-- Modal content-->
+            <div class="modal-content">
+                <form id="PatientRegistration" action="~/Patient/PatientRegistration" method="post">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Patient Registration</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            @Html.ValidationSummary()
+                            <div class="col-md-3">
+                                <div class="col-md-12 form-group profileimage" align="center">
+                                    <div class="col-md-12 form-group">
+                                        <img src="~/Content/images/profileimg.jpg" width="75px" height="100px" />
+                                    </div>
+                                    <button type="button" class="btn btn-default"><i class="fa fa-upload"></i>Upload Image</button>
+                                    <button type="button" class="btn btn-default"><i class="fa fa-camera"></i> Capture Image</button>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="col-md-12 form-group">
+                                    <div class="col-md-4">
+                                        @Html.LabelFor(model => model.patientname, new { htmlAttributes = new { @class = "control-lable1" } })<span style="color:red">*</span>
+                                        @Html.EditorFor(model => model.patientname, new { htmlAttributes = new { @class = "form-control1", @placeholder = "Patient Name", @required = true, @onkeypress = "validatepatientname" } })
+                                        <lable id="patienterror"></lable>
+                                    </div>
+                                    <div class="col-md-4">
+                                        @Html.LabelFor(model => model.mobile, new { htmlAttributes = new { @class = "control-lable1" } })
+                                        @Html.EditorFor(model => model.mobile, new { htmlAttributes = new { @class = "form-control1", @placeholder = "Mobile Number" } })
+                                    </div>
+                                    <div class="col-md-4">
+                                        @Html.LabelFor(model => model.email, new { htmlAttributes = new { @class = "control-lable1" } })
+                                        @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control1", @placeholder = "abc@xyz.com" } })
+                                    </div>
+                                </div>
+                                <div class="col-md-12 form-group">
+                                    <div class="col-md-4">
+                                        @Html.LabelFor(model => model.gender, new { htmlAttributes = new { @class = "control-lable1" } })
+                                        @Html.DropDownListFor(model => model.gender, new SelectList(new[] { "Male", "Female" }), new { @class = "form-control1" })
+                                    </div>
+                                    <div class="col-md-4">
+                                        @Html.LabelFor(model => model.dob, new { htmlAttributes = new { @class = "control-lable1" } })
+                                        @Html.EditorFor(model => model.dob, new { htmlAttributes = new { @class = "form-control1 date" } })
+                                    </div>
+                                    <div class="col-md-4">
+                                        @Html.LabelFor(model => model.age, new { htmlAttributes = new { @class = "control-lable1" } })
+                                        @Html.EditorFor(model => model.age, new { htmlAttributes = new { @class = "form-control1" } })
+                                    </div>
+                                </div>
+                                <div class="col-md-12 form-group">
+                                    <div class="col-md-4">
+                                        @Html.LabelFor(model => model.maritalstatus, new { htmlAttributes = new { @class = "control-lable1" } })
+                                        @Html.DropDownListFor(model => model.maritalstatus, new SelectList(new[] { "Married", "Unmarried" }), new { @class = "col-md-3 form-control1" })
+                                    </div>
+                                    <div class="col-md-4">
+                                        @Html.LabelFor(model => model.address, new { htmlAttributes = new { @class = "control-lable1" } })
+                                        @Html.EditorFor(model => model.address, new { htmlAttributes = new { @class = "form-control1 date" } })
+                                    </div>
+                                    <div class="col-md-4">
+                                        @Html.LabelFor(model => model.state, new { htmlAttributes = new { @class = "control-lable1" } })
+                                        @Html.EditorFor(model => model.state, new { htmlAttributes = new { @class = "form-control1" } })
+                                    </div>
+                                </div>
+                            </div>
 
-        <div class="col-md-9 form-group">
-            <div class="col-md-4">
-                @Html.LabelFor(model => model.gender, new { htmlAttributes = new { @class = "col-md-12 control-lable1" } })
-                @Html.DropDownListFor(model => model.gender, new SelectList(new[] { "Male", "Female" }), new { @class = "col-md-12 form-control1" })
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <row>
+                            <div class="col-md-12">
+                                <button type="button" id="Close" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="submit" id="btnSave" class="btn btn-warning" value="Save">Save</button>
+                            </div>
+                        </row>
+
+                    </div>
+                </form>
             </div>
-            <div class="col-md-4">
-                @Html.LabelFor(model => model.dob, new { htmlAttributes = new { @class = "col-md-12 control-lable1" } })
-                @Html.EditorFor(model => model.dob, new { htmlAttributes = new { @class = "col-md-12 form-control1 date" } })
-            </div>
-            <div class="col-md-4">
-                @Html.LabelFor(model => model.age, new { htmlAttributes = new { @class = "col-md-12 control-lable1" } })
-                @Html.EditorFor(model => model.age, new { htmlAttributes = new { @class = "col-md-12 form-control1" } })
-            </div>
+
         </div>
+    </div>
+    @*@using (Html.BeginForm("PatientRegistration", "Patient", FormMethod.Post))
+        {
+
+            @Html.AntiForgeryToken()
+
+            <div class="col-md-3" align="center">
+                <div class="col-md-12 form-group">
+                    <img src="~/Content/images/profileimg.jpg" class="profileimage" width="75px" height="100px" />
+                </div>
+                <button class="btn btn-default"><i class="fa fa-upload"></i>Upload Image</button>
+                <button class="btn btn-default"><i class="fa fa-camera"></i> Capture Image</button>
+            </div>
+            <div class="col-md-9 form-group">
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.patientname, new { htmlAttributes = new { @class = "col-md-12 control-lable1" } })<span style="color:red">*</span>
+                    @Html.EditorFor(model => model.patientname, new { htmlAttributes = new { @class = "col-md-12 form-control1", @placeholder = "Patient Name", @required = true } })
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.mobile, new { htmlAttributes = new { @class = "col-md-12 control-lable1" } })
+                    @Html.EditorFor(model => model.mobile, new { htmlAttributes = new { @class = "col-md-12 form-control1", @placeholder = "Mobile Number" } })
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.email, new { htmlAttributes = new { @class = "col-md-12 control-lable1" } })
+                    @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "col-md-12 form-control1", @placeholder = "abc@xyz.com" } })
+                </div>
+            </div>
+
+            <div class="col-md-9 form-group">
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.gender, new { htmlAttributes = new { @class = "col-md-12 control-lable1" } })
+                    @Html.DropDownListFor(model => model.gender, new SelectList(new[] { "Male", "Female" }), new { @class = "col-md-12 form-control1" })
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.dob, new { htmlAttributes = new { @class = "col-md-12 control-lable1" } })
+                    @Html.EditorFor(model => model.dob, new { htmlAttributes = new { @class = "col-md-12 form-control1 date" } })
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.age, new { htmlAttributes = new { @class = "col-md-12 control-lable1" } })
+                    @Html.EditorFor(model => model.age, new { htmlAttributes = new { @class = "col-md-12 form-control1" } })
+                </div>
+            </div>
 
             <div class="col-md-offset-3 col-md-9 form-group">
                 <div class="col-md-4">
@@ -69,5 +157,5 @@
                 <button class="btn btn-default">Close</button>
                 <button class="btn btn-warning">Save</button>
             </div>
-    }
+        }*@
 </div>
